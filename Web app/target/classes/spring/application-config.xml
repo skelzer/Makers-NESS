@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- Uncomment and add your base-package here: <context:component-scan base-package="org.springframework.samples.service"/> -->
+
+<context:component-scan base-package="metrica6.neptuno.utils" />
+
+	<!-- Datasource: determinar conexión a la bdd -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/artik" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+	</bean>
+
+
+	<!-- Creating TransactionManager Bean, since JDBC we are creating of type 
+		DataSourceTransactionManager -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+			</props>
+		</property>
+
+		<property name="annotatedClasses">
+			<list>
+				
+				<value>metrica6.artik.model.Bypass</value>
+				<value>metrica6.artik.model.TipoEstado</value>
+				<value>metrica6.artik.model.Datos</value>
+				<value>metrica6.artik.model.Mes</value>
+				<value>metrica6.artik.model.CiclosMes</value>
+				<value>metrica6.artik.model.Ciclos</value>
+			</list>
+		</property>
+
+	</bean>
+
+	<!-- Dao Hibernate -->
+	
+
+	
+	<bean id="bypassDao" class="metrica6.artik.model.dao.impl.BypassDaoImplH">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	 <bean id="tipoEstadoDao" class="metrica6.artik.model.dao.impl.TipoEstadoDaoImplH">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="datosDao" class="metrica6.artik.model.dao.impl.DatosDaoImplH">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="mesDao" class="metrica6.artik.model.dao.impl.MesDaoImplH">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="ciclosDao" class="metrica6.artik.model.dao.impl.CiclosDaoImplH">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="ciclosMesDao" class="metrica6.artik.model.dao.impl.CiclosMesDaoImplH">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- Services -->
+
+	
+	<bean id="bypassSvc" class="metrica6.artik.services.impl.BypassSvcImpl">
+		<property name="dao" ref="bypassDao" />
+	</bean>
+
+	<bean id="tipoEstadoSvc" class="metrica6.artik.services.impl.TipoEstadoSvcImpl">
+		<property name="dao" ref="tipoEstadoDao" />
+	</bean>
+	
+	<bean id="datosSvc" class="metrica6.artik.services.impl.DatosSvcImpl">
+		<property name="dao" ref="datosDao" />
+	</bean>
+	
+	<bean id="mesSvc" class="metrica6.artik.services.impl.MesSvcImpl">
+		<property name="dao" ref="mesDao" />
+	</bean>
+	
+	<bean id="ciclosSvc" class="metrica6.artik.services.impl.CiclosSvcImpl">
+		<property name="dao" ref="ciclosDao" />
+	</bean>
+	
+	<bean id="ciclosMesSvc" class="metrica6.artik.services.impl.CiclosMesSvcImpl">
+		<property name="dao" ref="ciclosMesDao" />
+	</bean>
+	
+	<!-- Mail -->
+	
+	
+
+ 
+ 
+ <!-- Mensajes -->
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="classpath:messages" />
+		<property name="defaultEncoding" value="LATIN1" />
+	</bean>
+
+</beans>
