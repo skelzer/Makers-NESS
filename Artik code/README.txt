@@ -1,0 +1,1 @@
+compile with gcc main.c -lcurl -o main
