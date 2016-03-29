@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/cnt_mnu_stats"
+        android:title="Usage Statistics"
+        />
+
+    <item
+        android:id="@+id/cnt_mnu_recircular"
+        android:title="Start Recirculation"
+        />
+    <item
+        android:id="@+id/cnt_mnu_alarma"
+        android:title="Set/Disable Alarm"
+        />
+
+    <item
+        android:id="@+id/cnt_mnu_rename"
+        android:title="Rename Bypass"
+        />
+    <item
+        android:id="@+id/cnt_mnu_eliminar"
+        android:title="Remove Bypass"
+        />
+</menu>
