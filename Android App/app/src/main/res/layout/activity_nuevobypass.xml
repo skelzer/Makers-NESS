@@ -15,7 +15,7 @@
         android:id="@+id/editText"
         android:layout_marginLeft="72dp"
         android:elegantTextHeight="true"
-        android:hint="Nombre del dispositivo"
+        android:hint="Device Name"
         android:layout_above="@+id/editText2"
         android:layout_centerHorizontal="true" />
 
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/editText2"
         android:layout_marginLeft="72dp"
-        android:hint="Numero de serie"
+        android:hint="Serial Number"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 

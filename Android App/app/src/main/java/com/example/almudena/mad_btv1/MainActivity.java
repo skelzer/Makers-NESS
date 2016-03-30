@@ -139,11 +139,11 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < nodosalvados.size(); i++) {
                     abp.add(nodosalvados.get(i));
                 }
-            } else {
+            } else {/*
                 abp.add(new Nodo_BYP("Primera Planta", "Caliente", "1"));
                 abp.add(new Nodo_BYP("Segunda Planta", "Frío", "2"));
                 abp.add(new Nodo_BYP("Tercera Planta", "Recirculando", "3"));
-                abp.add(new Nodo_BYP("Planta Cuarta", "Error", "4"));
+                abp.add(new Nodo_BYP("Planta Cuarta", "Error", "4"));*/
 
             }
         }
@@ -364,21 +364,7 @@ public class MainActivity extends AppCompatActivity {
         NotificationCompat.Builder mBuilder;
         if (resultado == 1) {
             mBuilder = new NotificationCompat.Builder(ctx).setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setSmallIcon(R.drawable.ic_action_reload).setAutoCancel(true).setContentTitle("Recirculation complete").setContentText("Recirculation is complete, you can now enjoy hot water without wasting a single drop.");
-            NotificationCompat.InboxStyle inboxStyle =
-                    new NotificationCompat.InboxStyle();
-            String[] events = new String[6];
-            events[1]="You can now enjoy hot water without";
-            events[2]="wasting a single drop.";
-            events[3]="\n";
-            events[4]="You've saved 3.52 gallons this time.";
-// Sets a title for the Inbox in expanded layout
-            inboxStyle.setBigContentTitle("Recirculation Complete");
-            mBuilder.setStyle(inboxStyle);
-// Moves events into the expanded layout
-            for (int i=0; i < events.length; i++) {
 
-                inboxStyle.addLine(events[i]);
-            }
         } else {
             mBuilder = new NotificationCompat.Builder(ctx).setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setSmallIcon(R.drawable.ic_error_24dp).setAutoCancel(true).setContentTitle("Error en la recirculación").setContentText("Ooops! Ha habido un problema mientras se realizaba la recirculación");
         }
