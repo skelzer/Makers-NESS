@@ -68,8 +68,6 @@ public class LoadingScreen extends AppCompatActivity {
     }
 
     public void Clicky(View v) {
-        Intent i = new Intent(getApplicationContext(), MainActivity_gv.class);
-        startActivity(i);
 
     }
 }

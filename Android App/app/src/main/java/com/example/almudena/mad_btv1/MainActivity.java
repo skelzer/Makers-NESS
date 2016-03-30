@@ -312,40 +312,7 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
-/*    private class TimeoutOperation extends AsyncTask<String, Void, Void> {
 
-        @Override
-        protected Void doInBackground(String... params) {
-
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ctx).setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setSmallIcon(R.drawable.ic_action_reload).setAutoCancel(true).setContentTitle("Recirculación Completa").setContentText("La recirculación se ha completado, ya puedes utilizar el agua caliente sin desperdiciar ni una gota.");
-            Intent resultIntent= new Intent(ctx,MainActivity_gv.class);
-            TaskStackBuilder stackBuilder=TaskStackBuilder.create(ctx);
-            stackBuilder.addParentStack(MainActivity_gv.class);
-            stackBuilder.addNextIntent(resultIntent);
-            PendingIntent resultPendingIntent =
-                    stackBuilder.getPendingIntent(
-                            0,
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                    );
-            mBuilder.setContentIntent(resultPendingIntent);
-            NotificationManager mNotificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-// mId allows you to update the notification later on.
-            mNotificationManager.notify(0,mBuilder.build());
-
-            super.onPostExecute(result);
-        }
-    }*/
 
     public void Clicky(View v) {
         Intent i = new Intent(this, Graph.class);

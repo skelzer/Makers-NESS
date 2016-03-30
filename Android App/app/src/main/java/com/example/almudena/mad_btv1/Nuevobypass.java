@@ -30,15 +30,6 @@ public class Nuevobypass extends AppCompatActivity {
     }
 
     public void Clicky(View v) {
-        /* i=new Intent(this,MainActivity_gv.class);
-        i.putExtra("ID",Identificador.getText().toString());
-        i.putExtra("Estado",Estado.getText().toString());
-        Intent intent=getIntent();
-        if(intent.hasExtra("salvado")){
-            i.putParcelableArrayListExtra("salvado",intent.getExtras().getParcelableArrayList("salvado"));
-        }
-        startActivity(i);
-    */
 
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://192.168.2.22:8080/Artik/add?name=" + Identificador.getText().toString() + "&num=" + Estado.getText().toString();
