@@ -30,7 +30,7 @@ public class LoadingScreen extends AppCompatActivity {
         setContentView(R.layout.activity_loading_screen);
         ImageView imgView = (ImageView) findViewById(R.id.imageView);
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://192.168.2.22:8080/Artik/nodos";
+        String url = "http://217.160.143.220:8080/Artik/nodos";
 
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override

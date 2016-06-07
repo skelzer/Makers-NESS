@@ -32,7 +32,7 @@ public class Nuevobypass extends AppCompatActivity {
     public void Clicky(View v) {
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://192.168.2.22:8080/Artik/add?name=" + Identificador.getText().toString() + "&num=" + Estado.getText().toString();
+        String url = "http://217.160.143.220:8080/Artik/add?name=" + Identificador.getText().toString().replace(" ","%20") + "&num=" + Estado.getText().toString();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

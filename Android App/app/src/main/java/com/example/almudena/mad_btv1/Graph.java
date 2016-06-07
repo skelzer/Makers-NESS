@@ -1,5 +1,6 @@
 package com.example.almudena.mad_btv1;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -22,6 +24,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
@@ -46,6 +49,7 @@ import java.util.GregorianCalendar;
 public class Graph extends AppCompatActivity {
     GraphView graph,graph2,graph3,graph4;
     static final int NUMBER_OF_VIEWS=4;
+    SeekBar sb;
     TextView tv, tv2;
     ImageView btn1,btn2,btn3;
     SimpleDateFormat spmdf1 = new SimpleDateFormat("yyyy-mm-dd");
@@ -55,12 +59,51 @@ public class Graph extends AppCompatActivity {
     ArrayList<Integer> tciclovalores=new ArrayList<>();
     ArrayList<Integer> nciclos=new ArrayList<>();
 
+    Context ctx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
+        tv2=(TextView)findViewById(R.id.textView2);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        ctx=getApplicationContext();
+        sb= (SeekBar) findViewById(R.id.seekBar);
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            RequestQueue queue = Volley.newRequestQueue(ctx);
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                tv2.setText(80+progress+" F");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+                String url = "http://217.160.143.220:8080/Artik/temp?id=1&t="+(80+sb.getProgress());
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.w("temp","temperatura cambiada");
+
+                    }
+                }
+                        , new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {       //             Toast.makeText(ctx,"No hay respuesta",Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+                );
+                queue.add(stringRequest);
+            }
+        });
         setSupportActionBar(myToolbar);
         android.support.v7.app.ActionBar ab = getSupportActionBar();
         ab.setTitle("");
@@ -131,7 +174,7 @@ public class Graph extends AppCompatActivity {
         tv2.setText("posicion: " + getIntent().getIntExtra("Fin", -1));*/
         btn3.setBackground(getDrawable(R.drawable.fondo484646));
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://192.168.2.22:8080/Artik/statsq?id=1";
+        String url = "http://217.160.143.220:8080/Artik/statsq?id=1";
         JsonObjectRequest JsonRequest = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

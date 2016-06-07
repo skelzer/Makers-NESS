@@ -99,7 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="95 F"
+        android:text="80 F"
         android:id="@+id/textView2"
         android:textColor="#ffffff"
         android:textSize="@dimen/abc_action_bar_stacked_max_height"
@@ -197,4 +197,16 @@
         android:layout_alignEnd="@+id/graph"
         android:layout_marginTop="12dp"
         android:layout_marginRight="16dp" />
+
+    <SeekBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar"
+        android:max="20"
+        android:progress="1"
+        android:indeterminate="false"
+        android:layout_alignEnd="@+id/textView"
+        android:layout_below="@+id/textView3"
+        android:layout_alignStart="@+id/textView" />
+
 </RelativeLayout>

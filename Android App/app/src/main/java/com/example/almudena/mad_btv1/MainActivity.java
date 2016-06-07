@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     Context ctx;
     ListView lista1;
     String changetext;
-
+    int estadoalterado=0;
     int changepos;
     String m_Input;
     renamedialog rendial;
@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
+            if(abp.getCount()!=0){
             final convertidoresestado cnv = new convertidoresestado();
             RequestQueue queue = Volley.newRequestQueue(ctx);
 
@@ -71,13 +72,14 @@ public class MainActivity extends AppCompatActivity {
                 conteoBYP = 0;
             }
             //String url="http://jsonip.com";
-            String url = "http://192.168.2.22:8080/Artik/squery?id=" + abp.getItem(conteoBYP).getIDArtik() + "&s=" + cnv.est_stint(abp.getItem(conteoBYP).getEstado()) + "&m=1";
+            String url = "http://217.160.143.220:8080/Artik/squery?id=" + abp.getItem(conteoBYP).getIDArtik() + "&s=" + cnv.est_stint(abp.getItem(conteoBYP).getEstado()) + "&m=1";
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     // tv.setText("Response is: " + response);
                     if (cnv.est_stint(abp.getItem(conteoBYP).getEstado()) == 2 && (Integer.parseInt(response) != 2)) {
-                        Notificacion(Integer.parseInt(response));
+
+                        preNotificacion(Integer.parseInt(abp.getItem(conteoBYP).getIDArtik()),Integer.parseInt(response));
                     }
                     Nodo_BYP nodo_old = abp.getItem(conteoBYP);
                     abp.insert(new Nodo_BYP(nodo_old.getIDnodo(), cnv.est_intst(Integer.parseInt(response)), nodo_old.getIDArtik(),nodo_old.getAlarmClock()), conteoBYP);
@@ -96,10 +98,54 @@ public class MainActivity extends AppCompatActivity {
             queue.add(stringRequest);
 
             mHandler.postDelayed(mStatusChecker, mInterval);
-            lista1.refreshDrawableState();
+            lista1.refreshDrawableState();}
         }
 
     };
+
+    public void preNotificacion(int posicion,int estado){
+        RequestQueue queue = Volley.newRequestQueue(ctx);
+        String urla = "http://217.160.143.220:8080/Artik/squery?id=" +posicion+ "&s=1&m=0";
+        StringRequest stringRequesta = new StringRequest(Request.Method.GET, urla, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                // tv.setText("Response is: " + response);
+            Toast.makeText(ctx,response,Toast.LENGTH_LONG).show();
+
+            }
+        }
+                , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {       //             Toast.makeText(ctx,"No hay respuesta",Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx,error.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        }
+        );
+        queue.add(stringRequesta);
+
+        String url = "http://217.160.143.220:8080/Artik/saved?id="+posicion;
+        estadoalterado=estado;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                // tv.setText("Response is: " + response);
+                    Notificacion(estadoalterado,Integer.parseInt(response.substring(response.indexOf('&')+1)));
+
+
+            }
+        }
+                , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {       //             Toast.makeText(ctx,"No hay respuesta",Toast.LENGTH_SHORT).show();
+
+            }
+        }
+        );
+        queue.add(stringRequest);
+
+    }
 
 
 
@@ -196,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
                 pendingalarm=true;
 
                 String kek=Settings.System.getString(getContentResolver(), Settings.System.NEXT_ALARM_FORMATTED).replaceAll("\\s+", "");
-                StringRequest sPendingAlarm = new StringRequest(Request.Method.GET, "http://192.168.2.22:8080/Artik/alarm?id="+idpendingalarm+"&d="+kek, new Response.Listener<String>() {
+                StringRequest sPendingAlarm = new StringRequest(Request.Method.GET, "http://217.160.143.220:8080/Artik/alarm?id="+idpendingalarm+"&d="+kek, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.w("Alarma","works");
@@ -249,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
                 }).show();
                 break;
             case R.id.cnt_mnu_eliminar:
-                String url = "http://192.168.2.22:8080/Artik/remove?id=" + abp.getItem(info.position).getIDArtik();
+                String url = "http://217.160.143.220:8080/Artik/remove?id=" + abp.getItem(info.position).getIDArtik();
 
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                     @Override
@@ -327,13 +373,50 @@ public class MainActivity extends AppCompatActivity {
         mHandler.removeCallbacks(mStatusChecker);
     }
 
-    void Notificacion(int resultado) {
+    void Notificacion(int resultado,int salvado) {
         NotificationCompat.Builder mBuilder;
-        if (resultado == 1) {
-            mBuilder = new NotificationCompat.Builder(ctx).setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setSmallIcon(R.drawable.ic_action_reload).setAutoCancel(true).setContentTitle("Recirculation complete").setContentText("Recirculation is complete, you can now enjoy hot water without wasting a single drop.");
+         if (resultado == 1) {
+        mBuilder = new NotificationCompat.Builder(ctx).setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setSmallIcon(R.drawable.ic_action_reload).setAutoCancel(true).setContentTitle("Recirculation complete").setContentText("Recirculation is complete, you can now enjoy hot water without wasting a single drop.");
 
-        } else {
-            mBuilder = new NotificationCompat.Builder(ctx).setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setSmallIcon(R.drawable.ic_error_24dp).setAutoCancel(true).setContentTitle("Error en la recirculación").setContentText("Ooops! Ha habido un problema mientras se realizaba la recirculación");
+
+        // }
+
+
+        NotificationCompat.InboxStyle inboxStyle =
+                new NotificationCompat.InboxStyle();
+        inboxStyle.setBigContentTitle("The recirculation is complete");
+
+
+        inboxStyle.addLine("You can now use hot water!");
+        inboxStyle.addLine("You've saved " +salvado+ " gallons.");
+
+// Moves the expanded layout object into the notification object.
+        mBuilder.setStyle(inboxStyle);
+    }
+        else{
+             mBuilder = new NotificationCompat.Builder(ctx).setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setSmallIcon(R.drawable.ic_error_24dp).setAutoCancel(true).setContentTitle("Error en la recirculación").setContentText("Ooops! Ha habido un problema mientras se realizaba la recirculación");
+
+         }
+
+        Intent resultIntent = new Intent(ctx, MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(ctx);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+// mId allows you to update the notification later on.
+        mNotificationManager.notify(0, mBuilder.build());
+
+        /*else {
+
         }
         Intent resultIntent = new Intent(ctx, MainActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(ctx);
@@ -344,11 +427,13 @@ public class MainActivity extends AppCompatActivity {
                         0,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
+
+
         mBuilder.setContentIntent(resultPendingIntent);
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 // mId allows you to update the notification later on.
-        mNotificationManager.notify(0, mBuilder.build());
+        mNotificationManager.notify(0, mBuilder.build());*/
 
     }
 
@@ -379,8 +464,8 @@ public class MainActivity extends AppCompatActivity {
 
 
             //String url="http://jsonip.com";
-            //String url = "http://192.168.2.22:8080/Artik/squery?id=".concat(param[0]) + "&s=2&m=1";
-            String url = "http://192.168.2.22:8080/Artik/squery?id=1&s=2&m=1";
+            //String url = "http://217.160.143.220:8080/Artik/squery?id=".concat(param[0]) + "&s=2&m=1";
+            String url = "http://217.160.143.220:8080/Artik/squery?id=1&s=2&m=1";
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                 @Override
